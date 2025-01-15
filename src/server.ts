@@ -49,16 +49,16 @@ app.use(function (req, res, next) {
 })();
 
 // Connect to Temporal
-(async () => {
-  try {
-    await Connection.connect({
-      address: "localhost:7233",
-    });
-    console.log("Connected to Temporal");
-  } catch (err) {
-    console.error("Temporal connection error ", err);
-  }
-})();
+// (async () => {
+//   try {
+//     await Connection.connect({
+//       address: "localhost:7233",
+//     });
+//     console.log("Connected to Temporal");
+//   } catch (err) {
+//     console.error("Temporal connection error ", err);
+//   }
+// })();
 
 // Routes
 app.use("/api/auth", authRoutes);
