@@ -1,11 +1,11 @@
 {
-  "name": "temporal-workflow-system",
+  "name": "flow-3-backend",
   "version": "1.0.0",
   "scripts": {
     "build": "npx tsc",
     "start:worker": "ts-node src/temporal/worker.ts",
     "start:api": "nodemon src/server.ts",
-    "start": "node dist/src/server.js"
+    "start": "node dist/server.js"
   },
   "dependencies": {
     "@temporalio/activity": "^1.11.5",
