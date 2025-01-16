@@ -3,9 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userSchema = void 0;
+exports.forgetPasswordBody = exports.userRegisterBody = void 0;
 const joi_1 = __importDefault(require("joi"));
-exports.userSchema = joi_1.default.object({
+exports.userRegisterBody = joi_1.default.object({
     name: joi_1.default.string().min(3).required().messages({
         "string.base": "Name should be a text value.",
         "string.min": "Name must be at least 3 characters long.",
@@ -24,5 +24,11 @@ exports.userSchema = joi_1.default.object({
         "string.base": "Password should be a text value.",
         "string.min": "Password must be at least 6 characters long.",
         "any.required": "Password is required.",
+    }),
+});
+exports.forgetPasswordBody = joi_1.default.object({
+    email: joi_1.default.string().email().required().messages({
+        "string.email": "Please provide a valid email address.",
+        "any.required": "Email is required.",
     }),
 });

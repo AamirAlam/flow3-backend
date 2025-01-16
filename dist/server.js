@@ -45,10 +45,18 @@ app.use(function (req, res, next) {
 // Connect to Temporal
 // (async () => {
 //   try {
-//     await Connection.connect({
-//       address: "localhost:7233",
-//     });
-//     console.log("Connected to Temporal");
+//     if (process.env.NODE_ENV === "production") {
+//       await Connection.connect({
+//         address: process.env.TEMPORAL_ENDPOINT_DEV,
+//         apiKey: process.env.TEMPORAL_API_DEV,
+//       });
+//       console.log("Connected to Temporal cloud");
+//     } else {
+//       await Connection.connect({
+//         address: "localhost:7233",
+//       });
+//       console.log("Connected to Temporal localhost");
+//     }
 //   } catch (err) {
 //     console.error("Temporal connection error ", err);
 //   }

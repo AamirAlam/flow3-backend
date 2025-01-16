@@ -1,6 +1,6 @@
 import Joi from "joi";
 
-export const userSchema = Joi.object({
+export const userRegisterBody = Joi.object({
   name: Joi.string().min(3).required().messages({
     "string.base": "Name should be a text value.",
     "string.min": "Name must be at least 3 characters long.",
@@ -19,5 +19,12 @@ export const userSchema = Joi.object({
     "string.base": "Password should be a text value.",
     "string.min": "Password must be at least 6 characters long.",
     "any.required": "Password is required.",
+  }),
+});
+
+export const forgetPasswordBody = Joi.object({
+  email: Joi.string().email().required().messages({
+    "string.email": "Please provide a valid email address.",
+    "any.required": "Email is required.",
   }),
 });
