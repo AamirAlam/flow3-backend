@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.forgetPasswordBody = exports.userRegisterBody = void 0;
+exports.resetPasswordBody = exports.forgetPasswordBody = exports.userRegisterBody = void 0;
 const joi_1 = __importDefault(require("joi"));
 exports.userRegisterBody = joi_1.default.object({
     name: joi_1.default.string().min(3).required().messages({
@@ -30,5 +30,20 @@ exports.forgetPasswordBody = joi_1.default.object({
     email: joi_1.default.string().email().required().messages({
         "string.email": "Please provide a valid email address.",
         "any.required": "Email is required.",
+    }),
+});
+exports.resetPasswordBody = joi_1.default.object({
+    email: joi_1.default.string().email().required().messages({
+        "string.email": "Please provide a valid email address.",
+        "any.required": "Email is required.",
+    }),
+    otp: joi_1.default.string().length(6).required().messages({
+        "string.length": "OTP must be 6 characters long.",
+        "any.required": "OTP is required.",
+    }),
+    newPassword: joi_1.default.string().min(6).required().messages({
+        "string.base": "Password should be a text value.",
+        "string.min": "Password must be at least 6 characters long.",
+        "any.required": "Password is required.",
     }),
 });

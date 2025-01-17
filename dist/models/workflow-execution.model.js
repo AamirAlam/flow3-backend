@@ -6,9 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.WorkflowExecutionModel = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const workflowExecutionSchema = new mongoose_1.default.Schema({
-    skeletonId: {
+    workspace: {
         type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: "WorkflowSkeleton",
+        ref: "workspace",
         required: true,
     },
     userId: {
@@ -21,7 +21,9 @@ const workflowExecutionSchema = new mongoose_1.default.Schema({
         enum: ["RUNNING", "COMPLETED", "FAILED"],
         default: "RUNNING",
     },
-    workflowId: String,
+    workflowId: {
+        type: String,
+    },
     result: mongoose_1.default.Schema.Types.Mixed,
     error: String,
     startedAt: {

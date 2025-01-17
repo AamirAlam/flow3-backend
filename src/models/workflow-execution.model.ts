@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 
 const workflowExecutionSchema = new mongoose.Schema({
-  skeletonId: {
+  workspace: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "WorkflowSkeleton",
+    ref: "workspace",
     required: true,
   },
   userId: {
@@ -16,7 +16,9 @@ const workflowExecutionSchema = new mongoose.Schema({
     enum: ["RUNNING", "COMPLETED", "FAILED"],
     default: "RUNNING",
   },
-  workflowId: String,
+  workflowId: {
+    type: String,
+  },
   result: mongoose.Schema.Types.Mixed,
   error: String,
   startedAt: {

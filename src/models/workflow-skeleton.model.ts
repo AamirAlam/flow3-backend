@@ -1,26 +1,26 @@
 import mongoose from "mongoose";
 
-const workflowSkeletonSchema = new mongoose.Schema(
-  {
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    name: {
-      type: String,
-      required: true,
-    },
-    description: String,
-    tasks: {
-      type: [String],
-      required: true,
-    },
+const workSpaceSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
   },
-  { timestamps: true }
-);
+  name: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+  },
+  workspace: {
+    type: mongoose.Schema.Types.Mixed,
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
 
-export const WorkflowSkeletonModel = mongoose.model(
-  "WorkflowSkeleton",
-  workflowSkeletonSchema
-);
+export const WorkSpaceModel = mongoose.model("workspaces", workSpaceSchema);

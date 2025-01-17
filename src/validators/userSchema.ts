@@ -28,3 +28,19 @@ export const forgetPasswordBody = Joi.object({
     "any.required": "Email is required.",
   }),
 });
+
+export const resetPasswordBody = Joi.object({
+  email: Joi.string().email().required().messages({
+    "string.email": "Please provide a valid email address.",
+    "any.required": "Email is required.",
+  }),
+  otp: Joi.string().length(6).required().messages({
+    "string.length": "OTP must be 6 characters long.",
+    "any.required": "OTP is required.",
+  }),
+  newPassword: Joi.string().min(6).required().messages({
+    "string.base": "Password should be a text value.",
+    "string.min": "Password must be at least 6 characters long.",
+    "any.required": "Password is required.",
+  }),
+});

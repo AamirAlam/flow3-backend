@@ -1,16 +1,19 @@
 import express from "express";
 import { Client } from "@temporalio/client";
-import { WorkflowSkeletonModel } from "../models/workflow-skeleton.model";
+import { WorkSpaceModel } from "../models/workflow-skeleton.model";
 import { WorkflowExecutionModel } from "../models/workflow-execution.model";
 import { auth } from "../middleware/auth.middleware";
+import mongoose from "mongoose";
 
 const router = express.Router();
 const client = new Client();
 
-// Create new workflow skeleton
+// Create and save workspace in database
+// POST: /api/workflow
+// Request body: name, workspace
 router.post("/workflow", auth, async (req: any, res) => {
   try {
-    const skeleton = new WorkflowSkeletonModel({
+    const skeleton = new WorkSpaceModel({
       ...req.body,
       userId: req.user.userId,
     });
@@ -21,10 +24,12 @@ router.post("/workflow", auth, async (req: any, res) => {
   }
 });
 
-// Get all workflow skeletons
+// Get all user created workspaces
+// GET: /api/workflow/all
+
 router.get("/all", auth, async (req: any, res) => {
   try {
-    const skeletons = await WorkflowSkeletonModel.find({
+    const skeletons = await WorkSpaceModel.find({
       userId: req.user.userId,
     });
     res.json(skeletons);
@@ -33,26 +38,33 @@ router.get("/all", auth, async (req: any, res) => {
   }
 });
 
-// Start a workflow execution
-router.post("/execute/:skeletonId", auth, async (req: any, res) => {
+// Start a workspace execution
+// POST: /api/workflow/execute/:workspaceId
+// Request body: none
+router.post("/execute/:workspaceId", auth, async (req: any, res) => {
   try {
-    const skeleton = await WorkflowSkeletonModel.findOne({
-      _id: req.params.skeletonId,
+    // validate if workspaceId is valid mongoose id
+    if (mongoose.Types.ObjectId.isValid(req.params.workspaceId) === false) {
+      return res.status(400).json({ error: "Invalid workspace id" });
+    }
+
+    const workspace = await WorkSpaceModel.findOne({
+      _id: req.params.workspaceId,
       userId: req.user.userId,
     });
 
-    if (!skeleton) {
-      return res.status(404).json({ error: "Workflow skeleton not found" });
+    if (!workspace) {
+      return res.status(404).json({ error: "Workflow workspace not found" });
     }
 
     const handle = await client.workflow.start("testWorkflow", {
-      args: [skeleton.tasks],
+      args: [workspace.workspace],
       taskQueue: "api-workflow",
-      workflowId: `workflow-${skeleton.id}`,
+      workflowId: `workflow-${workspace.id}`,
     });
 
     const execution = new WorkflowExecutionModel({
-      skeletonId: skeleton.id,
+      workspaceId: workspace.id,
       userId: req.user.userId,
       workflowId: handle.workflowId,
     });
@@ -68,7 +80,9 @@ router.post("/execute/:skeletonId", auth, async (req: any, res) => {
   }
 });
 
-// Get all running workflows
+//  Get all running workflows
+//  GET: /api/workflow/running
+
 router.get("/running", auth, async (req: any, res) => {
   try {
     const executions = await WorkflowExecutionModel.find({
@@ -80,7 +94,8 @@ router.get("/running", auth, async (req: any, res) => {
   }
 });
 
-// Get a specific workflow execution
+// Get a specific workflow execution status
+// GET: /api/workflow/execution-status/:id
 router.get("/execution-status/:id", auth, async (req: any, res) => {
   try {
     const execution = await WorkflowExecutionModel.findOne({

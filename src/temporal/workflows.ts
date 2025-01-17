@@ -16,15 +16,13 @@ const { makeFirstApiCall, makeSecondApiCall } = proxyActivities<
 // testing workflow execution
 export async function testWorkflow(activities: [string]) {
   // First worker makes the initial API call
-
-  let finalResult;
-  for (const activity of activities) {
-    if (activity === "makeFirstApiCall") {
-      finalResult = await makeFirstApiCall("args");
-    } else if (activity === "makeSecondApiCall") {
-      finalResult = await makeSecondApiCall("args");
-    }
-  }
-
-  return finalResult;
+  // let finalResult;
+  // for (const activity of activities) {
+  //   if (activity === "makeFirstApiCall") {
+  //     finalResult = await makeFirstApiCall("args");
+  //   } else if (activity === "makeSecondApiCall") {
+  //     finalResult = await makeSecondApiCall("args");
+  //   }
+  // }
+  // return finalResult;
 }
