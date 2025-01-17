@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import { validateBody } from "../middleware/bodyValidator";
 import {
   forgetPasswordBody,
+  loginBody,
   resetPasswordBody,
   userRegisterBody,
 } from "../validators/userSchema";
@@ -40,12 +41,20 @@ router.post(
 // Login a user
 // POST: /api/auth/login
 // Request body: email, password
-router.post("/login", async (req, res) => {
+router.post("/login", validateBody(loginBody), async (req, res) => {
   try {
     const user = await UserModel.findOne({ email: req.body.email });
-    if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
+
+    // check if user exists
+    if (!user) {
+      throw new Error("Email is not registered yet!");
+    }
+
+    // check if password is correct
+    if (!(await bcrypt.compare(req.body.password, user.password))) {
       throw new Error("Invalid credentials");
     }
+
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!);
     const userData = await UserModel.findById(user.id).select({ password: 0 });
 

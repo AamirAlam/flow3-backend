@@ -34,10 +34,15 @@ router.post("/register", (0, bodyValidator_1.validateBody)(userSchema_1.userRegi
 // Login a user
 // POST: /api/auth/login
 // Request body: email, password
-router.post("/login", async (req, res) => {
+router.post("/login", (0, bodyValidator_1.validateBody)(userSchema_1.loginBody), async (req, res) => {
     try {
         const user = await user_model_1.UserModel.findOne({ email: req.body.email });
-        if (!user || !(await bcryptjs_1.default.compare(req.body.password, user.password))) {
+        // check if user exists
+        if (!user) {
+            throw new Error("Email is not registered yet!");
+        }
+        // check if password is correct
+        if (!(await bcryptjs_1.default.compare(req.body.password, user.password))) {
             throw new Error("Invalid credentials");
         }
         const token = jsonwebtoken_1.default.sign({ userId: user.id }, process.env.JWT_SECRET);
