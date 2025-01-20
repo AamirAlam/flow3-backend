@@ -56,20 +56,21 @@ router.post("/execute/:workspaceId", auth_middleware_1.auth, async (req, res) =>
         if (!workspace) {
             return res.status(404).json({ error: "Workflow workspace not found" });
         }
-        const handle = await client.workflow.start("testWorkflow", {
+        console.log("workspace :>> ", workspace);
+        const handle = await client.workflow.start("startWorkflow", {
             args: [workspace.workspace],
             taskQueue: "api-workflow",
             workflowId: `workflow-${workspace.id}`,
         });
-        const execution = new workflow_execution_model_1.WorkflowExecutionModel({
-            workspaceId: workspace.id,
-            userId: req.user.userId,
-            workflowId: handle.workflowId,
-        });
-        await execution.save();
+        // const execution = new WorkflowExecutionModel({
+        //   workspaceId: workspace.id,
+        //   userId: req.user.userId,
+        //   workspace: handle.workflowId,
+        // });
+        // await execution.save();
         res.json({
             message: "Workflow started",
-            executionId: execution.id,
+            executionId: "",
             workflowId: handle.workflowId,
         });
     }

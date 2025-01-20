@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const client_1 = require("@temporalio/client");
 const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = require("dotenv");
 const auth_routes_1 = __importDefault(require("./routes/auth.routes"));
@@ -43,24 +44,26 @@ app.use(function (req, res, next) {
     }
 })();
 // Connect to Temporal
-// (async () => {
-//   try {
-//     if (process.env.NODE_ENV === "production") {
-//       await Connection.connect({
-//         address: process.env.TEMPORAL_ENDPOINT_DEV,
-//         apiKey: process.env.TEMPORAL_API_DEV,
-//       });
-//       console.log("Connected to Temporal cloud");
-//     } else {
-//       await Connection.connect({
-//         address: "localhost:7233",
-//       });
-//       console.log("Connected to Temporal localhost");
-//     }
-//   } catch (err) {
-//     console.error("Temporal connection error ", err);
-//   }
-// })();
+(async () => {
+    try {
+        if (process.env.NODE_ENV === "production") {
+            await client_1.Connection.connect({
+                address: process.env.TEMPORAL_ENDPOINT_DEV,
+                apiKey: process.env.TEMPORAL_API_DEV,
+            });
+            console.log("Connected to Temporal cloud");
+        }
+        else {
+            await client_1.Connection.connect({
+                address: "localhost:7233",
+            });
+            console.log("Connected to Temporal localhost");
+        }
+    }
+    catch (err) {
+        console.error("Temporal connection error ", err);
+    }
+})();
 // Routes
 app.use("/api/auth", auth_routes_1.default);
 app.use("/api/workflows", workflow_routes_1.default);

@@ -1,23 +1,30 @@
-import axios from "axios";
+import {
+  executeDeployAndMintNFT,
+  returnCoinbaseWallet,
+  tradeCoinbase,
+} from "./activities/coinbase";
+import { executeFetchGoogleSheetColumn } from "./activities/googleSheets";
+import { makeHtrpApiCall } from "./activities/http";
+import { executeMoralisErc20WalletTransfersNode } from "./activities/moralis";
+import { executeTelegramNotification } from "./activities/telegram";
 
-export async function makeFirstApiCall(args: any) {
-  try {
-    // wait for 10 seconds
-    await new Promise((resolve) => setTimeout(resolve, 10000));
-
-    return { data: "First activity data" };
-  } catch (error) {
-    throw error;
-  }
-}
-
-export async function makeSecondApiCall(args: any) {
-  try {
-    // wait for 10 seconds
-    await new Promise((resolve) => setTimeout(resolve, 10000));
-
-    return { data: "Second activity data" };
-  } catch (error) {
-    throw error;
+export async function getActivityCallback(type: string, inputs: any) {
+  switch (type) {
+    case "makeApiCall":
+      return makeHtrpApiCall(inputs);
+    case "coinbaseWallet":
+      return returnCoinbaseWallet(inputs);
+    case "moralis":
+      return executeMoralisErc20WalletTransfersNode(inputs);
+    case "coinbase":
+      return tradeCoinbase(inputs);
+    case "telegram":
+      return executeTelegramNotification(inputs);
+    case "googleSheets":
+      return executeFetchGoogleSheetColumn(inputs);
+    case "deployNFT":
+      return executeDeployAndMintNFT(inputs);
+    default:
+      throw new Error("Invalid activity type");
   }
 }
