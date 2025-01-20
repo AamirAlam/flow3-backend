@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.startWorkflow = startWorkflow;
 const workflow_1 = require("@temporalio/workflow");
+// Configure activity execution at temporal worker
 const { getActivityCallback } = (0, workflow_1.proxyActivities)({
     startToCloseTimeout: "1 minute",
     retry: {
@@ -64,9 +65,8 @@ async function executeNodes(workflow, nodeId, input) {
         throw error;
     }
 }
-// testing workflow execution
+// Start workflow execution
 async function startWorkflow(workspaceData) {
-    // First worker makes the initial API call
     // execute activities as a a cyclic graph
     const startNode = workspaceData.nodes.find((node) => node.id === "start");
     if (!startNode) {

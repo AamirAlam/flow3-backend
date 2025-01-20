@@ -8,6 +8,7 @@ import { makeHtrpApiCall } from "./activities/http";
 import { executeMoralisErc20WalletTransfersNode } from "./activities/moralis";
 import { executeTelegramNotification } from "./activities/telegram";
 
+// Configure activity callback to respective types
 export async function getActivityCallback(type: string, inputs: any) {
   switch (type) {
     case "makeApiCall":

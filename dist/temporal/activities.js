@@ -6,6 +6,7 @@ const googleSheets_1 = require("./activities/googleSheets");
 const http_1 = require("./activities/http");
 const moralis_1 = require("./activities/moralis");
 const telegram_1 = require("./activities/telegram");
+// Configure activity callback to respective types
 async function getActivityCallback(type, inputs) {
     switch (type) {
         case "makeApiCall":

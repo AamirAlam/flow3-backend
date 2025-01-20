@@ -1,6 +1,7 @@
 import { proxyActivities } from "@temporalio/workflow";
 import type * as activities from "./activities";
 
+// Configure activity execution at temporal worker
 const { getActivityCallback } = proxyActivities<typeof activities>({
   startToCloseTimeout: "1 minute",
   retry: {
@@ -84,10 +85,8 @@ async function executeNodes(workflow: any, nodeId: string, input: any) {
   }
 }
 
-// testing workflow execution
+// Start workflow execution
 export async function startWorkflow(workspaceData: any) {
-  // First worker makes the initial API call
-
   // execute activities as a a cyclic graph
   const startNode = workspaceData.nodes.find(
     (node: any) => node.id === "start"
