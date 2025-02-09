@@ -18,10 +18,15 @@ export interface WorkflowExecution {
   id: string;
   skeletonId: string;
   userId: string;
-  status: 'RUNNING' | 'COMPLETED' | 'FAILED';
+  status: "RUNNING" | "COMPLETED" | "FAILED";
   firstWorkerResult?: any;
   secondWorkerResult?: any;
   error?: string;
   startedAt: Date;
   completedAt?: Date;
+}
+
+export interface ActivityArgs {
+  config: any;
+  inputs?: any;
 }

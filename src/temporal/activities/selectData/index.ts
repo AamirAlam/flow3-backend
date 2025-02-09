@@ -1,10 +1,23 @@
-export async function executeSelectDataNode(args: any) {
-  try {
-    //: todo replace this with actual code
-    await new Promise((resolve) => setTimeout(resolve, 10000));
+import { ActivityArgs } from "../../../types";
 
-    // : todo define the fixed returned type for all nodes
-    return { data: args };
+// transform data from input
+export async function executeSelectDataNode(args: ActivityArgs) {
+  try {
+    const { config, inputs } = args;
+
+    if (Array.isArray(inputs)) {
+      const selector = config.field;
+      const data = inputs.map((input) => input[selector]);
+      return data.slice(0, 5);
+    } else if (typeof inputs === "object") {
+      const selector = config.field;
+      const data = inputs[selector];
+      return data;
+    } else {
+      const selector = config.field;
+      const data = inputs[selector];
+      return data;
+    }
   } catch (error) {
     throw new Error("Error executing executeSelectDataNode");
   }
